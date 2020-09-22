@@ -17,3 +17,7 @@ venv.bak/
 
 # Python
 __pycache__/
+
+# Project
+./config.ini
+config.ini
