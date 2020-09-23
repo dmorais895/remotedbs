@@ -123,4 +123,4 @@ def main(user_name):
 
 if __name__ == "__main__":
 
-    main('david')
+    main(sys.argv[1])
