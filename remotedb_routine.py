@@ -13,6 +13,7 @@ URL_BASE = 'https://customer.elephantsql.com/api'
 API_KEY = config.get('config', 'api_key')
 AUTH_INFO = ('', API_KEY)
 
+
 def list_instances():
 
     ENDPOINT = f'{URL_BASE}/instances'
@@ -22,6 +23,7 @@ def list_instances():
     if response.status_code == 200:
         content = response.json()
         return content
+
 
 def get_instance_info(instance_id):
 
@@ -33,6 +35,7 @@ def get_instance_info(instance_id):
         content = response.json()
         return content
 
+
 def delete_instance(instance_id):
 
     ENDPOINT = f'{URL_BASE}/instances/{instance_id}'
@@ -43,16 +46,19 @@ def delete_instance(instance_id):
         message = f'Instancia ({instance_id}) deletada com sucesso.'
         return message
 
+
 def create_instance(name, aws_region='sa-east-1'):
 
     ENDPOINT = f'{URL_BASE}/instances'
     params = f'name=sapiencia-{name}&plan=turtle&region=amazon-web-services::{aws_region}&tags=teste'
 
-    response = requests.post(ENDPOINT, auth=AUTH_INFO, params=params, verify=True)
+    response = requests.post(ENDPOINT, auth=AUTH_INFO,
+                             params=params, verify=True)
 
     if response.status_code == 200:
         content = response.json()
         return content
+
 
 def renew_instance(user_name):
 
@@ -60,22 +66,23 @@ def renew_instance(user_name):
     current_instances = list_instances()
 
     print(f'Bucando instancia de {user_name}')
-    target = next((instance for instance in current_instances if f'{user_name}' in instance['name']), None)
+    target = next(
+        (instance for instance in current_instances if f'{user_name}' in instance['name']), None)
 
     if target == None:
-        
+
         print(f'{user_name} não possui uma instância atualmente')
         print(f'Criando instância sapiencia-{user_name}')
         new_instance = create_instance(user_name)
         return new_instance
-    
+
     else:
-        
+
         print(f'{user_name} já possui uma instância atualmente')
         print('Deletando instancia atual...')
         message = delete_instance(target['id'])
         print(message)
-        
+
         print(f'Criando nova instância sapiencia-{user_name}')
         new_instance = create_instance(user_name)
 
@@ -87,12 +94,13 @@ def main(user_name):
     try:
 
         new_instance = renew_instance(user_name)
-                     
+
         instance_id = new_instance['id']
         instance_url = new_instance['url']
         instance_address = instance_url.split("@")[1].split(":")[0]
         instance_user_db = instance_url.strip('postgres:\/\/\/').split(':')[0]
-        instance_passwd = instance_url.strip('postgres:\/\/\/').split("@")[0].split(":")[1]
+        instance_passwd = instance_url.strip(
+            'postgres:\/\/\/').split("@")[0].split(":")[1]
 
         parser = configparser.ConfigParser()
         parser.add_section('database')
@@ -106,12 +114,11 @@ def main(user_name):
         new_config_file = Path('database.ini')
         parser.write(new_config_file.open('w'))
 
-
     except configparser.ParsingError as e:
 
         print(e)
         sys.exit(1)
-    
+
     except FileExistsError as e:
         print(e)
         sys.exit(2)
@@ -120,6 +127,7 @@ def main(user_name):
 
         print(e)
         sys.exit(3)
+
 
 if __name__ == "__main__":
 
