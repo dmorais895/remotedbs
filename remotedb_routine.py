@@ -3,6 +3,8 @@ from requests.auth import HTTPBasicAuth
 import json
 import configparser
 import sys
+from pathlib import Path
+
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -21,7 +23,7 @@ def list_instances():
         content = response.json()
         return content
 
-def get_instace_info(instance_id):
+def get_instance_info(instance_id):
 
     ENDPOINT = f'{URL_BASE}/instances/{instance_id}'
 
@@ -44,7 +46,7 @@ def delete_instance(instance_id):
 def create_instance(name, aws_region='sa-east-1'):
 
     ENDPOINT = f'{URL_BASE}/instances'
-    params = f'name=sapiencia-{name}&plan=turtle&region=amazon-web-services::{aws_region}'
+    params = f'name=sapiencia-{name}&plan=turtle&region=amazon-web-services::{aws_region}&tags=teste'
 
     response = requests.post(ENDPOINT, auth=AUTH_INFO, params=params, verify=True)
 
@@ -80,20 +82,45 @@ def renew_instance(user_name):
         return new_instance
 
 
-def main(argv):
-
-    user_name = argv
+def main(user_name):
 
     try:
 
         new_instance = renew_instance(user_name)
-        print(new_instance)
+                     
+        instance_id = new_instance['id']
+        instance_url = new_instance['url']
+        instance_address = instance_url.split("@")[1].split(":")[0]
+        instance_user_db = instance_url.strip('postgres:\/\/\/').split(':')[0]
+        instance_passwd = instance_url.strip('postgres:\/\/\/').split("@")[0].split(":")[1]
 
-    except Exception as e:
+        parser = configparser.ConfigParser()
+        parser.add_section('database')
+        parser.set('database', 'id', f'{instance_id}')
+        parser.set('database', 'url', f'{instance_url}')
+        parser.set('database', 'address', f'{instance_address}')
+        parser.set('database', 'user', f'{instance_user_db}')
+        parser.set('database', 'db', f'{instance_user_db}')
+        parser.set('database', 'password', f'{instance_passwd}')
+
+        new_config_file = Path('database.ini')
+        parser.write(new_config_file.open('w'))
+
+
+    except configparser.ParsingError as e:
 
         print(e)
         sys.exit(1)
+    
+    except FileExistsError as e:
+        print(e)
+        sys.exit(2)
+
+    except IOError as e:
+
+        print(e)
+        sys.exit(3)
 
 if __name__ == "__main__":
 
-    main(sys.argv[1])
+    main('david')

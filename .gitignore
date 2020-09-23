@@ -21,3 +21,5 @@ __pycache__/
 # Project
 ./config.ini
 config.ini
+# ./database.ini
+# database.ini
