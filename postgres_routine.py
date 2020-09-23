@@ -44,6 +44,7 @@ def get_backup_host_credentials():
             "user": environ.get('POSTGRES_USER'),
             "ssh_key_path": environ.get('SSH_KEY'),
             "remote_backup_path": environ.get('REMOTE_PATH'),
+            "ssh_port": environ.get('REMOTE_SSH_PORT')
         }
 
         return credentials
@@ -54,7 +55,7 @@ def get_backup_host_credentials():
         sys.exit(2)
 
 
-def connect_to_backup_host(host, user, ssh_key_path)
+def connect_to_backup_host(host, user, ssh_key_path, ssh_port)
 
     try:
         
@@ -64,7 +65,7 @@ def connect_to_backup_host(host, user, ssh_key_path)
         scp_client.connect(
             host,
             username=user,
-            port=2046,
+            port=ssh_port,
             key_filename=ssh_key_path,
             look_for_keys=True,
             timeout=5000
