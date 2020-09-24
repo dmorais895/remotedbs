@@ -182,8 +182,8 @@ def main(backup_name):
 
         backup_file_name = f'{backup_name}_{date}'
         remote_file_name = f'{backup_file_name}.tar.gz'
-        print(remote_file_name)
-        print(remote_host_credentials.get('remote_backup_path'))
+        
+        print(f'Target file: {remote_host_credentials["remote_backup_path"]}/{backup_file_name}')
 
         print('Creating remote tar.gz from target directory at the remote host')
         remote_command = f'cd {remote_host_credentials["remote_backup_path"]} && tar -czf $HOME/{remote_file_name}.tar.gz {backup_file_name}'
