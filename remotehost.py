@@ -8,6 +8,8 @@ from dotenv import load_dotenv
 from paramiko import SSHClient, AutoAddPolicy, RSAKey
 from paramiko.auth_handler import AuthenticationException, SSHException
 from scp import SCPClient, SCPException
+from tarfile import ExtractError, ReadError
+from configparser import Error, NoSectionError
 
 
 def get_remote_db_credentials():
@@ -32,6 +34,14 @@ def get_remote_db_credentials():
 
         print(e)
         sys.exit(1)
+
+    except Error as error:
+
+        print('Error during get credentials: ' + error)
+
+    except NoSectionError as error:
+
+        print('Especified section not found at database.ini: ' + error)
 
     finally:
 
@@ -82,7 +92,6 @@ def connect_to_backup_host(host, user, ssh_key_path, ssh_port):
     except AuthenticationException as e:
 
         print(f'Authentication failed: {e}')
-        raise e
         sys.exit(3)
 
     return ssh_client, scp_client
@@ -131,13 +140,27 @@ def get_file_from_remote_host(filename, scp_client):
         raise e
 
 
-def umcompress_file(compressed_file):
+def decompress_file(compressed_file):
 
-    uncrompress = tarfile.open(compressed_file, "r:gz")
+    try:
 
-    uncrompress.extractall()
+        uncrompress = tarfile.open(compressed_file, "r:gz")
 
-    uncrompress.close()
+        uncrompress.extractall()
+
+        return True
+
+    except ReadError as error:
+
+        print('Error reading the target file:' + error)
+
+    except ExtractError as error:
+
+        print('Error during de file extract: ' + error)
+
+    finally:
+
+        uncrompress.close()
 
 
 def main(backup_name):
@@ -170,11 +193,13 @@ def main(backup_name):
         print('Getting tar file from remote host')
         get_file_from_remote_host(remote_file_name, scp_client)
 
-        print('Uncompressing recived file locally')
-        umcompress_file(remote_file_name)
+        print('Decompressing file locally')
+        if decompress_file(remote_file_name):
+            print('Successfully decompressed file')
 
     finally:
 
+        print('Closing connections')
         ssh_client.close()
         scp_client.close()
 
