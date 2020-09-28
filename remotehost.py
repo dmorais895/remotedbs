@@ -143,14 +143,16 @@ def main(backup_name):
             remote_host_credentials['ssh_port']
         )
 
-        backup_file_name = f'{backup_name}_{date}'
-        remote_file_name = f'{backup_file_name}.tar.gz'
+        backup_file_dir = f'{backup_name}_{date}'
+        print(backup_file_dir)
+        remote_file_name = f'{backup_name}.tar.gz'
+        print(remote_file_name)
 
         print(
-            f'Target file: {remote_host_credentials["remote_backup_path"]}/{backup_file_name}')
+            f'Target file: {remote_host_credentials["remote_backup_path"]}/{backup_file_dir}')
 
         print('Creating remote tar.gz from target directory at the remote host')
-        remote_command = f'cd {remote_host_credentials["remote_backup_path"]} && tar -czf $HOME/{remote_file_name} {backup_file_name}'
+        remote_command = f'cd {remote_host_credentials["remote_backup_path"]}/{backup_file_dir} && tar -czf $HOME/{remote_file_name} {backup_name}'
         print(f'Executing remote command: {remote_command}')
         execute_remote_command(remote_command, ssh_client)
 
@@ -160,11 +162,11 @@ def main(backup_name):
         print('Decompressing file locally')
         if decompress_file(remote_file_name):
             print('Successfully decompressed file')
-    
+
     except Exception as e:
-        
+
         print(e)
-    
+
     finally:
 
         print('Closing connections')

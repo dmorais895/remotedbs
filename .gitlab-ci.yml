@@ -29,6 +29,7 @@ remote_routines:
     - ls
   artifacts:
     paths: 
-      - remotedbs/*
+      - ./sapiencia*
+    expires_in: 30min  
   only:
     - master
