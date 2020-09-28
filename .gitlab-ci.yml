@@ -29,6 +29,7 @@ prepare_env:
 remotedb:
   stage: remote_operation
   before_script:
+    - apt update && apt install -y gettext-base
     - echo -e "${ID_RSA_CONTENT//_/\\n}" > /id_rsa
     - "chmod 600 /id_rsa"
   script:
