@@ -24,6 +24,7 @@ remote_routines:
     - pip install -r requirements.txt # you can also use tox
     - python remotedb.py ${GITLAB_USER_LOGIN}
     - python remotehost.py
+    - pwd
   artifacts:
     paths: 
       - remotedbs/*
