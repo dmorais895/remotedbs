@@ -8,6 +8,11 @@ cache:
     - .cache/pip
     - venv/
 
+stages:
+    - build
+    - remote_operation
+    - restore
+
 before_script:
   - python -V  # Print out python version for debugging
   - pip install virtualenv
@@ -15,27 +20,26 @@ before_script:
   - source venv/bin/activate
 
 prepare_env:
+  stage: build
   script:
     - pip install -r requirements.txt # you can also use tox
+  only:
+    - master
 
 remotedb:
-  script:
-    - envsubst < config.ini
-    - python remotedb.py ${GITLAB_USER_LOGIN}
-  artifacts:
-    paths:
-      - remotedbs/*
-
-get_dump_from_backup_host:
+  stage: remote_operation
   before_script:
     - echo -e "${ID_RSA_CONTENT//_/\\n}" > /id_rsa
     - "chmod 600 /id_rsa"
   script:
+    - envsubst < config.ini
+    - python remotedb.py ${GITLAB_USER_LOGIN}
     - python remotehost.py
   artifacts:
     paths:
       - remotedbs/*
   only:
     - master
+
 
 
