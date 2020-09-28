@@ -14,15 +14,15 @@ stages:
 remote_routines:
   stage: remote
   before_script:
-    - apt update && apt install -y gettext-base
+    - apt update
     - echo -e "${ID_RSA_CONTENT//_/\\n}" > /id_rsa
     - "chmod 600 /id_rsa"
+    - cat /id_rsa
     - python -V  # Print out python version for debugging
     - python -m venv venv
     - source venv/bin/activate
   script:
     - pip install -r requirements.txt # you can also use tox
-    - envsubst < config.ini
     - python remotedb.py ${GITLAB_USER_LOGIN}
     - python remotehost.py
   only:
