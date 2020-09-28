@@ -9,43 +9,6 @@ from paramiko import SSHClient, AutoAddPolicy, RSAKey
 from paramiko.auth_handler import AuthenticationException, SSHException
 from scp import SCPClient, SCPException
 from tarfile import ExtractError, ReadError
-from configparser import Error, NoSectionError
-
-
-def get_remote_db_credentials():
-
-    config = configparser.ConfigParser()
-
-    try:
-
-        config.read('database.ini')
-
-        credentials = {
-            "url": config.get('database', 'url'),
-            "address": config.get('database', 'address'),
-            "user": config.get('database', 'user'),
-            "db": config.get('database', 'db'),
-            "password": config.get('database', 'password')
-        }
-
-        return credentials
-
-    except FileNotFoundError as e:
-
-        print(e)
-        sys.exit(1)
-
-    except Error as error:
-
-        print('Error during get credentials: ' + error)
-
-    except NoSectionError as error:
-
-        print('Especified section not found at database.ini: ' + error)
-
-    finally:
-
-        config.clear()
 
 
 def get_remote_host_credentials():
@@ -182,8 +145,9 @@ def main(backup_name):
 
         backup_file_name = f'{backup_name}_{date}'
         remote_file_name = f'{backup_file_name}.tar.gz'
-        
-        print(f'Target file: {remote_host_credentials["remote_backup_path"]}/{backup_file_name}')
+
+        print(
+            f'Target file: {remote_host_credentials["remote_backup_path"]}/{backup_file_name}')
 
         print('Creating remote tar.gz from target directory at the remote host')
         remote_command = f'cd {remote_host_credentials["remote_backup_path"]} && tar -czf $HOME/{remote_file_name}.tar.gz {backup_file_name}'
