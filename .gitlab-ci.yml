@@ -1,0 +1,41 @@
+image: python:latest
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip
+    - venv/
+
+before_script:
+  - python -V  # Print out python version for debugging
+  - pip install virtualenv
+  - virtualenv venv
+  - source venv/bin/activate
+
+prepare_env:
+  script:
+    - pip install -r requirements.txt # you can also use tox
+
+remotedb:
+  script:
+    - envsubst < config.ini
+    - python remotedb.py ${GITLAB_USER_LOGIN}
+  artifacts:
+    paths:
+      - remotedbs/*
+
+get_dump_from_backup_host:
+  before_script:
+    - echo -e "${ID_RSA_CONTENT//_/\\n}" > /id_rsa
+    - "chmod 600 /id_rsa"
+  script:
+    - python remotehost.py
+  artifacts:
+    paths:
+      - remotedbs/*
+  only:
+    - master
+
+
