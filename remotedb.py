@@ -4,12 +4,27 @@ import json
 import configparser
 import sys
 from pathlib import Path
+from os import environ, path
+from dotenv import load_dotenv
 
-
-# config = configparser.ConfigParser()
-# config.read('config.ini')
 
 URL_BASE = 'https://customer.elephantsql.com/api'
+
+def get_elephansql_api_key():
+
+    try:
+
+        basedir = path.abspath(path.dirname(__file__))
+        load_dotenv(path.join(basedir, '.env'))
+
+        API_KEY = environ.get('ELEPHANTSQL_API_KEY')
+        AUTH_INFO = ('', API_KEY)
+        return API_KEY
+
+    except FileNotFoundError as e:
+
+        print(e)
+        sys.exit(2)
 
 def list_instances(AUTH_INFO):
 
@@ -88,10 +103,7 @@ def renew_instance(user_name, AUTH_INFO):
 
 def main(user_name):
 
-    config = configparser.ConfigParser()
-    config.read('config.ini')
-    API_KEY = config.get('config', 'api_key')
-    AUTH_INFO = ('', API_KEY)
+    AUTH_INFO = get_elephansql_api_key()
 
     try:
 
