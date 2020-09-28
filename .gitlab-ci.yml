@@ -20,7 +20,7 @@ before_script:
   - source venv/bin/activate
 
 prepare_env:
-  stage: build
+  stage: remote_operation
   script:
     - pip install -r requirements.txt # you can also use tox
   only:
