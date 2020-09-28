@@ -46,15 +46,17 @@ def do_pg_restore(host, user, passwd, datname, dump_file):
 
     pg_restore_command = [
         'pg_restore',
-        f'--username={user}',
+        f'-U {user}',
         f'--no-password',
-        f'--host={host}',
-        f'--jobs=2',
+        f'-h {host}',
+        f'-j 2',
         '--no-owner',
-        f'--format=d',
-        f'--dbname={datname}',
+        f'-Fd',
+        f'-d {datname}',
         dump_file
     ]
+
+    print(pg_restore_command)
 
     success = True
 
@@ -81,14 +83,10 @@ def main():
     password = credentials['password']
 
     dump_file = 'sapiencia'
+    print(credentials)
+    # print('Restaurando dump em na nova instancia')
+    do_pg_restore(address, user, password, database, dump_file)
 
-    print('Restaurando dump em na nova instancia')
-    command_result_status = do_pg_restore(address, user, password, database, dump_file)
-
-    if command_result_status:
-        print('Banco restaurado com sucesso')
-    else:
-        print('Erros ocorreram durante o restore.')
 
 if __name__ == "__main__":
     main()
