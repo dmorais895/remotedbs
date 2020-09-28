@@ -6,15 +6,14 @@ import sys
 from pathlib import Path
 
 
-config = configparser.ConfigParser()
-config.read('config.ini')
+# config = configparser.ConfigParser()
+# config.read('config.ini')
 
 URL_BASE = 'https://customer.elephantsql.com/api'
-API_KEY = config.get('config', 'api_key')
-AUTH_INFO = ('', API_KEY)
+
 print(AUTH_INFO)
 
-def list_instances():
+def list_instances(AUTH_INFO):
 
     ENDPOINT = f'{URL_BASE}/instances'
 
@@ -25,7 +24,7 @@ def list_instances():
         return content
 
 
-def get_instance_info(instance_id):
+def get_instance_info(instance_id, AUTH_INFO):
 
     ENDPOINT = f'{URL_BASE}/instances/{instance_id}'
 
@@ -36,7 +35,7 @@ def get_instance_info(instance_id):
         return content
 
 
-def delete_instance(instance_id):
+def delete_instance(instance_id, AUTH_INFO):
 
     ENDPOINT = f'{URL_BASE}/instances/{instance_id}'
 
@@ -47,7 +46,7 @@ def delete_instance(instance_id):
         return message
 
 
-def create_instance(name, aws_region='sa-east-1'):
+def create_instance(name, aws_region='sa-east-1', AUTH_INFO):
 
     ENDPOINT = f'{URL_BASE}/instances'
     params = f'name=sapiencia-{name}&plan=turtle&region=amazon-web-services::{aws_region}&tags=teste'
@@ -60,10 +59,10 @@ def create_instance(name, aws_region='sa-east-1'):
         return content
 
 
-def renew_instance(user_name):
+def renew_instance(user_name, AUTH_INFO):
 
     print('Listando instâncias atuais')
-    current_instances = list_instances()
+    current_instances = list_instances(AUTH_INFO)
 
     print(f'Bucando instancia de {user_name}')
     target = next(
@@ -73,27 +72,32 @@ def renew_instance(user_name):
 
         print(f'{user_name} não possui uma instância atualmente')
         print(f'Criando instância sapiencia-{user_name}')
-        new_instance = create_instance(user_name)
+        new_instance = create_instance(user_name, AUTH_INFO)
         return new_instance
 
     else:
 
         print(f'{user_name} já possui uma instância atualmente')
         print('Deletando instancia atual...')
-        message = delete_instance(target['id'])
+        message = delete_instance(target['id'], AUTH_INFO)
         print(message)
 
         print(f'Criando nova instância sapiencia-{user_name}')
-        new_instance = create_instance(user_name)
+        new_instance = create_instance(user_name, AUTH_INFO)
 
         return new_instance
 
 
 def main(user_name):
 
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    API_KEY = config.get('config', 'api_key')
+    AUTH_INFO = ('', API_KEY)
+
     try:
 
-        new_instance = renew_instance(user_name)
+        new_instance = renew_instance(user_name, AUTH_INFO)
 
         instance_id = new_instance['id']
         instance_url = new_instance['url']
