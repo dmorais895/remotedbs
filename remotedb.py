@@ -19,7 +19,7 @@ def get_elephansql_api_key():
 
         API_KEY = environ.get('ELEPHANTSQL_API_KEY')
         AUTH_INFO = ('', API_KEY)
-        return API_KEY
+        return AUTH_INFO
 
     except FileNotFoundError as e:
 
