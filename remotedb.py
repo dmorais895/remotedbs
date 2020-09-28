@@ -46,7 +46,7 @@ def delete_instance(instance_id, AUTH_INFO):
         return message
 
 
-def create_instance(name, aws_region='sa-east-1', AUTH_INFO):
+def create_instance(name, aws_region, AUTH_INFO):
 
     ENDPOINT = f'{URL_BASE}/instances'
     params = f'name=sapiencia-{name}&plan=turtle&region=amazon-web-services::{aws_region}&tags=teste'
@@ -72,7 +72,7 @@ def renew_instance(user_name, AUTH_INFO):
 
         print(f'{user_name} não possui uma instância atualmente')
         print(f'Criando instância sapiencia-{user_name}')
-        new_instance = create_instance(user_name, AUTH_INFO)
+        new_instance = create_instance(user_name, 'sa-east-1', AUTH_INFO)
         return new_instance
 
     else:
@@ -83,7 +83,7 @@ def renew_instance(user_name, AUTH_INFO):
         print(message)
 
         print(f'Criando nova instância sapiencia-{user_name}')
-        new_instance = create_instance(user_name, AUTH_INFO)
+        new_instance = create_instance(user_name, 'sa-east-1', AUTH_INFO)
 
         return new_instance
 
