@@ -14,7 +14,6 @@ stages:
 remote_routines:
   stage: remote
   before_script:
-    - apt update
     - echo -e "${ID_RSA_CONTENT//_/\\n}" > /id_rsa
     - "chmod 600 /id_rsa"
     - cat /id_rsa
