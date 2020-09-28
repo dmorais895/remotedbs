@@ -39,7 +39,7 @@ pg_restore:
   dependencies:
     - remote_routines
   before_script:
-    - apt-get update && apt-get install -y wget gnupg2
+    - apt-get -qq update && apt-get -qq install -y wget gnupg2
     - echo "deb http://apt.postgresql.org/pub/repos/apt buster-pgdg main" > /etc/apt/sources.list.d/pgdg.list
     - wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
     - apt-get update && apt-get install -y postgresql-12
@@ -47,7 +47,8 @@ pg_restore:
     - source venv/bin/activate
   script:
     - pip install -r requirements.txt
-    - python pg_restore.py
+    - cat  database.ini
+    # - python pg_restore.py
     - ls
   only:
     - master
