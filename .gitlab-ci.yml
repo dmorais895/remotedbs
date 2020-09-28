@@ -9,38 +9,21 @@ cache:
     - venv/
 
 stages:
-    - build
-    - remote_operation
-    - restore
+    - remote
 
-before_script:
-  - python -V  # Print out python version for debugging
-  - pip install virtualenv
-  - virtualenv venv
-  - source venv/bin/activate
-
-prepare_env:
-  stage: remote_operation
-  script:
-    - pip install -r requirements.txt # you can also use tox
-  only:
-    - master
-
-remotedb:
+remote_routines:
   stage: remote_operation
   before_script:
     - apt update && apt install -y gettext-base
     - echo -e "${ID_RSA_CONTENT//_/\\n}" > /id_rsa
     - "chmod 600 /id_rsa"
+    - python -V  # Print out python version for debugging
+    - python -m venv venv
+    - source venv/bin/activate
   script:
+    - pip install -r requirements.txt # you can also use tox
     - envsubst < config.ini
     - python remotedb.py ${GITLAB_USER_LOGIN}
     - python remotehost.py
-  artifacts:
-    paths:
-      - remotedbs/*
   only:
     - master
-
-
-
