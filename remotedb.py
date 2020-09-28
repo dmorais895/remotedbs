@@ -12,7 +12,7 @@ config.read('config.ini')
 URL_BASE = 'https://customer.elephantsql.com/api'
 API_KEY = config.get('config', 'api_key')
 AUTH_INFO = ('', API_KEY)
-
+print(AUTH_INFO)
 
 def list_instances():
 
