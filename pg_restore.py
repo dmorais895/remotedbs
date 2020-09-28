@@ -5,7 +5,7 @@ import subprocess
 
 from configparser import Error, NoSectionError
 from subprocess import PIPE, Popen, CalledProcessError
-import remotehost
+
 
 def get_remote_db_credentials():
 
@@ -80,9 +80,7 @@ def main():
     address = credentials['address']
     password = credentials['password']
 
-    most_recent_dump_date = remotehost.get_date()
-    dump_file = f'sapiencia_{most_recent_dump_date}'
-    print(dump_file)
+    dump_file = 'sapiencia'
 
     print('Restaurando dump em na nova instancia')
     command_result_status = do_pg_restore(address, user, password, database, dump_file)
@@ -91,6 +89,6 @@ def main():
         print('Banco restaurado com sucesso')
     else:
         print('Erros ocorreram durante o restore.')
-        
+
 if __name__ == "__main__":
     main()
