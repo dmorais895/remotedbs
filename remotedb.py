@@ -11,8 +11,6 @@ from pathlib import Path
 
 URL_BASE = 'https://customer.elephantsql.com/api'
 
-print(AUTH_INFO)
-
 def list_instances(AUTH_INFO):
 
     ENDPOINT = f'{URL_BASE}/instances'
