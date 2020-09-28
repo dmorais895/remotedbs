@@ -12,7 +12,7 @@ stages:
     - remote
 
 remote_routines:
-  stage: remote_operation
+  stage: remote
   before_script:
     - apt update && apt install -y gettext-base
     - echo -e "${ID_RSA_CONTENT//_/\\n}" > /id_rsa
