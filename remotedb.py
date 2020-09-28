@@ -50,7 +50,7 @@ def delete_instance(instance_id):
 def create_instance(name, aws_region='sa-east-1'):
 
     ENDPOINT = f'{URL_BASE}/instances'
-    params = f'name=sapiencia-{name}&plan=turtle&region=amazon-web-services::{aws_region}&tags=teste&&pg_version=12'
+    params = f'name=sapiencia-{name}&plan=turtle&region=amazon-web-services::{aws_region}&tags=teste'
 
     response = requests.post(ENDPOINT, auth=AUTH_INFO,
                              params=params, verify=True)
@@ -132,4 +132,4 @@ def main(user_name):
 if __name__ == "__main__":
 
     # main(sys.argv[1])
-    main('david')
+    main('ana')
