@@ -30,6 +30,6 @@ remote_routines:
   artifacts:
     paths: 
       - ./sapiencia*
-    expires_in: 30min  
+    expire_in: 30min  
   only:
     - master
