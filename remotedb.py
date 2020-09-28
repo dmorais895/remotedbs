@@ -131,5 +131,4 @@ def main(user_name):
 
 if __name__ == "__main__":
 
-    # main(sys.argv[1])
-    main('ana')
+    main(sys.argv[1])
