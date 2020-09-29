@@ -46,7 +46,6 @@ def do_pg_restore(host, user, passwd, datname, dump_file):
 
     pg_restore_command = f'pg_restore --host={host} ' \
             f'--username={user} ' \
-            f'--no-password ' \
             f'--format=d ' \
             f'--dbname={datname} ' \
             f'{dump_file} '
