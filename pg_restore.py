@@ -80,7 +80,7 @@ def main():
     dump_file_path = 'sapiencia'
     print(credentials)
     # print('Restaurando dump em na nova instancia')
-    restore_success = do_pg_restore(address, user, password, database, dump_file)
+    restore_success = do_pg_restore(address, user, password, database, dump_file_path)
     print(restore_success)
 
 

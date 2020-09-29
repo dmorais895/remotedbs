@@ -49,6 +49,7 @@ pg_restore:
   script:
     - pip install -r requirements.txt
     - cat  database.ini
+    - ls .
     - python pg_restore.py
     - ls
   only:
