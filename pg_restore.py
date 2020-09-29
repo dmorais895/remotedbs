@@ -56,7 +56,7 @@ def do_pg_restore(host, user, passwd, datname, dump_file):
 
     try:
 
-        command = Popen(pg_restore_command, shell=True, env={'PGPASWORD': passwd})
+        command = Popen(pg_restore_command, shell=True, env={'PGPASSWORD': passwd})
 
         command.wait()
 
