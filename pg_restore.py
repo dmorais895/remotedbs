@@ -45,11 +45,11 @@ def get_remote_db_credentials():
 def do_pg_restore(host, user, passwd, datname, dump_file):
 
     pg_restore_command = f'pg_restore --host={host} ' \
-            f'--dbname={datname} ' \
             f'--username={user} ' \
             f'--no-password ' \
             f'--format=d ' \
-            f'--file={dump_file} '
+            f'--dbname={datname} ' \
+            f'{dump_file} '
 
     print(pg_restore_command)
 
