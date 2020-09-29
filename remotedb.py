@@ -172,10 +172,9 @@ def main(user_name):
         instance_id = new_instance['id']
         instance_url = new_instance['url']
         instance_address = instance_url.split("@")[1].split(":")[0]
-        instance_user_db = instance_url.strip('postgres://').split(':')[0]
-        instance_passwd = instance_url.strip(
-            'postgres:\/\/\/').split("@")[0].split(":")[1]
-        print(instance_user_db)
+        instance_user_db = instance_url.split('//')[1].split('@')[0].split(':')[0]
+        instance_passwd = instance_url.split('//')[1].split('@')[0].split(':')[1]
+
         parser = configparser.ConfigParser()
         parser.add_section('database')
         parser.set('database', 'id', f'{instance_id}')
