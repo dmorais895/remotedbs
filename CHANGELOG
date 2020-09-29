@@ -1,0 +1,10 @@
+# Changelog
+All notable changes to this project will be documented in this file.
+
+## [1.0.0] - 2020-09-29
+### Added
+- Script that consumes the ElephantSQL (https://www.elephantsql.com/) to create, delete instances.
+- Script that connects on a remote host and get files via SCP.
+- Script that execute pg_restore command.
+- .gitlab-ci.yml to execute scripts via Gitlab Pipelines.
+- CHANGELOG
