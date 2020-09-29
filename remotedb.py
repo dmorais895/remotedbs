@@ -8,10 +8,22 @@ from os import environ, path
 from dotenv import load_dotenv
 
 
+__author__ = "David Morais"
+__credits__ = ["David Morais"]
+__version__ = "0.0.1-SNAPSHOT"
+__maintainer__ = "David Morais"
+__email__ = "moraisdavid8@gmail.com"
+__status__ = "Dev"
+
 URL_BASE = 'https://customer.elephantsql.com/api'
 
-def get_elephansql_api_key():
 
+def get_elephansql_api_key():
+    """This methods gets the api key from .env file
+
+    Returns:
+        tuple: Returns a tuple in the format accept by the API
+    """
     try:
 
         basedir = path.abspath(path.dirname(__file__))
@@ -26,7 +38,13 @@ def get_elephansql_api_key():
         print(e)
         sys.exit(2)
 
+
 def list_instances(AUTH_INFO):
+    """This function gets de list of the intances currently avaiable at the ELEPHANTSQL team.
+
+    Returns:
+        dict: Returns de json reponse from api method
+    """
 
     ENDPOINT = f'{URL_BASE}/instances'
 
@@ -38,6 +56,15 @@ def list_instances(AUTH_INFO):
 
 
 def get_instance_info(instance_id, AUTH_INFO):
+    """This method get information about an specific instance by her id.
+
+    Arguments:
+        instance_id {interger}: Instance's id that wants to get information
+        AUTH_INFO {tuple}: Tuple contains the information for authentication on the ELEPHANTSQL API.
+
+    Returns:
+        dict: Returns de json reponse from api method
+    """
 
     ENDPOINT = f'{URL_BASE}/instances/{instance_id}'
 
@@ -49,6 +76,15 @@ def get_instance_info(instance_id, AUTH_INFO):
 
 
 def delete_instance(instance_id, AUTH_INFO):
+    """This method deletes  an specific instance by her id.
+
+    Arguments:
+        instance_id {interger}: Instance's id that wants to delete
+        AUTH_INFO {tuple}: Tuple contains the information for authentication on the ELEPHANTSQL API.
+
+    Returns:
+        string: Returns de json reponse from api method
+    """
 
     ENDPOINT = f'{URL_BASE}/instances/{instance_id}'
 
@@ -60,6 +96,16 @@ def delete_instance(instance_id, AUTH_INFO):
 
 
 def create_instance(name, aws_region, AUTH_INFO):
+    """This method deletes  an specific instance by her id.
+
+    Arguments:
+        name {string}: User name to concatenate in the instance name when created.
+        aws_region {string}: AWS region for instance deploy.
+        AUTH_INFO {tuple}: Tuple contains the information for authentication on the ELEPHANTSQL API.
+
+    Returns:
+        dict: Returns de json reponse from api method
+    """
 
     ENDPOINT = f'{URL_BASE}/instances'
     params = f'name=sapiencia-{name}&plan=turtle&region=amazon-web-services::{aws_region}&tags=teste'
@@ -73,6 +119,15 @@ def create_instance(name, aws_region, AUTH_INFO):
 
 
 def renew_instance(user_name, AUTH_INFO):
+    """This method execute routine of get a existent instance, delete it and create a new one for the user.
+
+    Arguments:
+        user_name {string}: User name to concatenate in the instance name when created.
+        AUTH_INFO {tuple}: Tuple contains the information for authentication on the ELEPHANTSQL API.
+
+    Returns:
+        dict: Return the information about the recentily created instance on the json format.
+    """
 
     print('Listando instâncias atuais')
     current_instances = list_instances(AUTH_INFO)
@@ -102,7 +157,12 @@ def renew_instance(user_name, AUTH_INFO):
 
 
 def main(user_name):
+    """This is the manin method that execute the entire routine.
 
+    Args:
+        user_name (String): Username from the user thats running the script.
+    """
+    
     AUTH_INFO = get_elephansql_api_key()
 
     try:

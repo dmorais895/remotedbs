@@ -10,8 +10,19 @@ from paramiko.auth_handler import AuthenticationException, SSHException
 from scp import SCPClient, SCPException
 from tarfile import ExtractError, ReadError
 
+__author__ = "David Morais"
+__credits__ = ["David Morais"]
+__version__ = "0.0.1-SNAPSHOT"
+__maintainer__ = "David Morais"
+__email__ = "moraisdavid8@gmail.com"
+__status__ = "Dev"
 
 def get_remote_host_credentials():
+    """Get credentials of the host that helds the dumps for the database restore script.
+
+    Returns:
+        dict: Returns a dict with de credentials for connect on the host with SSH/SCP.
+    """
 
     try:
 
@@ -35,6 +46,18 @@ def get_remote_host_credentials():
 
 
 def connect_to_backup_host(host, user, ssh_key_path, ssh_port):
+    """This methos execute de SSH/SCP connection on the remote host that helds the dump files.
+
+    Args:
+        host (String): FQDN (Fully Qualified Domain Name) of the remote host that contains the dump files.
+        user (String): Username to connect with SSH/SCP
+        ssh_key_path (String): Path to the private key for the connection
+        ssh_port (String): SSH protocol port open at the host
+
+    Returns:
+        Object (SSHClient): SSHClient object to interact with the remote host.
+        Object (SCPClient): SCPClient object to interact with the remote host.
+    """
 
     try:
 
@@ -61,6 +84,15 @@ def connect_to_backup_host(host, user, ssh_key_path, ssh_port):
 
 
 def disconnect_from_backup_host(ssh_client, scp_client):
+    """This method closes the SSH/SCP connection to the remote host
+
+    Args:
+        ssh_client (SSHClient): SSHClient object obtained from the connect_to_backup_host
+        scp_client (SCPClient): SCPClient object obtained from the connect_to_backup_host
+    Returns:
+        Object (SSHClient): SSHClient object to interact with the remote host.
+        Object (SCPClient): SCPClient object to interact with the remote host.
+    """
 
     if ssh_client:
         ssh_client.close()
@@ -72,6 +104,11 @@ def disconnect_from_backup_host(ssh_client, scp_client):
 
 
 def get_date():
+    """This methos gets the yerterdate date on the format: YYYYMMDD
+
+    Returns:
+        String: yerterday date on the format: YYYYMMDD
+    """
 
     date = datetime.date.today() - datetime.timedelta(days=1)
 
@@ -81,6 +118,12 @@ def get_date():
 
 
 def execute_remote_command(command, ssh_client):
+    """This method execute command on the remote host:
+
+    Args:
+        command (String): Command to be executed on the remote host 
+        ssh_client (SSHClient): SSHCLient object to connects on the remote host.
+    """
 
     stdin, stdout, stderr = ssh_client.exec_command(command)
 
@@ -93,6 +136,15 @@ def execute_remote_command(command, ssh_client):
 
 
 def get_file_from_remote_host(filename, scp_client):
+    """This methos gets a file from the remote host via SCP connection.
+
+    Args:
+        filename (String): The name of the file to be geted.
+        scp_client (SCPClient): SCPClient object to use on the scp connection.
+
+    Raises:
+        e: SCPException if the connection goes wrong.
+    """
 
     try:
 
@@ -104,6 +156,14 @@ def get_file_from_remote_host(filename, scp_client):
 
 
 def decompress_file(compressed_file):
+    """This methos decompress a file locally
+
+    Args:
+        compressed_file (String): The name of the compressed file.
+
+    Returns:
+        boolean: Returns true if dont get an exception during the extraction of the file.
+    """
 
     try:
 
@@ -120,6 +180,7 @@ def decompress_file(compressed_file):
     except ExtractError as error:
 
         print('Error during de file extract: ' + error)
+        return False
 
     finally:
 
@@ -127,6 +188,11 @@ def decompress_file(compressed_file):
 
 
 def main(backup_name):
+    """The main methos that execute the entire routine
+
+    Args:
+        backup_name (String): Name of the dump file at the remote host.
+    """
 
     print('Getting remote host credentials')
     remote_host_credentials = get_remote_host_credentials()
