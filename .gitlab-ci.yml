@@ -32,6 +32,7 @@ remote_routines:
   only:
     - master
   except:
+    - merge_requests
     - tags
 
 pg_restore:
@@ -54,4 +55,5 @@ pg_restore:
   only:
     - master
   except:
+    - merge_requests
     - tags  
