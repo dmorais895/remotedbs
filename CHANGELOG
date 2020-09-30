@@ -8,3 +8,7 @@ All notable changes to this project will be documented in this file.
 - Script that execute pg_restore command.
 - .gitlab-ci.yml to execute scripts via Gitlab Pipelines.
 - CHANGELOG
+
+## [1.0.1] - 2020-09-30
+### Bug fixed
+- Correct bug on getting remotedb credencials
