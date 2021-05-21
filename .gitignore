@@ -22,4 +22,4 @@ __pycache__/
 ./config.ini
 config.ini
 # ./database.ini
-# database.ini
+database.ini
