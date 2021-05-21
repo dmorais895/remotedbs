@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 
 __author__ = "David Morais"
 __credits__ = ["David Morais"]
-__version__ = "1.0.1"
+__version__ = "1.0.1-SNAPSHOT"
 __maintainer__ = "David Morais"
 __email__ = "moraisdavid8@gmail.com"
 __status__ = "Dev"
@@ -171,7 +171,7 @@ def main(user_name):
 
         instance_id = new_instance['id']
         instance_url = new_instance['url']
-        instance_address = instance_url.split("@")[1].split(":")[0]
+        instance_address = instance_url.split("@")[1].split(":")[0].split("/")[0]
         instance_user_db = instance_url.split('//')[1].split('@')[0].split(':')[0]
         instance_passwd = instance_url.split('//')[1].split('@')[0].split(':')[1]
 

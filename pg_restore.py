@@ -9,7 +9,7 @@ from subprocess import PIPE, Popen, CalledProcessError
 
 __author__ = "David Morais"
 __credits__ = ["David Morais"]
-__version__ = "1.0.1"
+__version__ = "1.0.1-SNAPSHOT"
 __maintainer__ = "David Morais"
 __email__ = "moraisdavid8@gmail.com"
 __status__ = "Dev"
