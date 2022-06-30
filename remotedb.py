@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 __author__ = "David Morais"
 __credits__ = ["David Morais"]
-__version__ = "1.0.1-SNAPSHOT"
+__version__ = "1.0.3"
 __maintainer__ = "David Morais"
 __email__ = "moraisdavid8@gmail.com"
 __status__ = "Dev"
