@@ -1,5 +1,4 @@
 import requests
-from requests.auth import HTTPBasicAuth
 import json
 import configparser
 import sys
@@ -10,7 +9,7 @@ from dotenv import load_dotenv
 
 __author__ = "David Morais"
 __credits__ = ["David Morais"]
-__version__ = "1.0.1-SNAPSHOT"
+__version__ = "1.0.3"
 __maintainer__ = "David Morais"
 __email__ = "moraisdavid8@gmail.com"
 __status__ = "Dev"
@@ -95,7 +94,7 @@ def delete_instance(instance_id, AUTH_INFO):
         return message
 
 
-def create_instance(name, aws_region, AUTH_INFO):
+def create_instance(user_name, AUTH_INFO):
     """This method deletes  an specific instance by her id.
 
     Arguments:
@@ -108,10 +107,14 @@ def create_instance(name, aws_region, AUTH_INFO):
     """
 
     ENDPOINT = f'{URL_BASE}/instances'
-    params = f'name=sapiencia-{name}&plan=turtle&region=amazon-web-services::{aws_region}&tags=teste'
+    data = {
+        'name': f'sapiencia-{user_name}',
+        'plan': 'turtle',
+        'region': 'amazon-web-services::sa-east-1',
+        'tags': 'teste'
+    }
 
-    response = requests.post(ENDPOINT, auth=AUTH_INFO,
-                             params=params, verify=True)
+    response = requests.post(ENDPOINT, auth=AUTH_INFO, data=data, verify=True)
 
     if response.status_code == 200:
         content = response.json()
@@ -140,7 +143,7 @@ def renew_instance(user_name, AUTH_INFO):
 
         print(f'{user_name} não possui uma instância atualmente')
         print(f'Criando instância sapiencia-{user_name}')
-        new_instance = create_instance(user_name, 'sa-east-1', AUTH_INFO)
+        new_instance = create_instance(user_name, AUTH_INFO)
         return new_instance
 
     else:
@@ -151,7 +154,7 @@ def renew_instance(user_name, AUTH_INFO):
         print(message)
 
         print(f'Criando nova instância sapiencia-{user_name}')
-        new_instance = create_instance(user_name, 'sa-east-1', AUTH_INFO)
+        new_instance = create_instance(user_name, AUTH_INFO)
 
         return new_instance
 
